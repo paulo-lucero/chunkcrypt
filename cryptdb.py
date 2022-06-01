@@ -1,10 +1,18 @@
 from cryptchunk import encrypt_file, decrypt_file
-from cryptography.fernet import Fernet
 import os
 
+def_ch_sz = 1024
+
 while True:
-    encrt_mode = input('Please specify if \"encrypt\" or \"decrypt\", input the same keyword: ')
     encrt_key = input('Please input the encryption key: ')
+    encrt_mode = input('Please specify if \"encrypt\" or \"decrypt\", input the same keyword: ')
+    if encrt_mode == 'encrypt':
+        conf_ch_sz = input(f'Specify a reading chunck size or input \"ok\" to use the default chunk size of {def_ch_sz} :')
+        if conf_ch_sz.lower() != 'ok':
+            try:
+                def_ch_sz = int(conf_ch_sz)
+            except:
+                print('Invalid chunck size, please try again')
     if encrt_mode != 'encrypt' and encrt_mode != 'decrypt':
         print(f'{encrt_mode} is not a valid encryption mode')
         continue
@@ -20,14 +28,10 @@ while True:
         out_path = out_path if out_path.find('.db') > -1 else out_path + '.db'
     break
 
-db_key = Fernet(encrt_key)
-
-def_ch_sz = 1024
-
 if encrt_mode == 'encrypt':
-    encrypt_file(db_key, db_path, out_path, def_ch_sz)
+    encrypt_file(encrt_key, db_path, out_path, def_ch_sz)
 else:
-    decrypt_file(db_key, db_path, out_path)
+    decrypt_file(encrt_key, db_path, out_path)
 
 
 

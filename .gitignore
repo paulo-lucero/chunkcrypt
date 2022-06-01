@@ -1,1 +1,3 @@
-chunkcryptvenv/
+virchunk/
+__pycache__/
+tests/

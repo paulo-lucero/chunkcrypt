@@ -1,3 +1,5 @@
 virchunk/
 __pycache__/
 tests/
+dist/
+*/*.egg-info

@@ -21,30 +21,30 @@ encrypt_file(None, '/home/user/myfile.txt', '/home/user/encryfile.txt', 2048)
 
 Decrypting files:
 ```python
-    from chunkcrypt.cryptchunk import decrypt_file, downl_decrypt
-    # decrypt_file(key, encrypted_file, output_file)
-    # downl_decrypt(url, output_file, key, silent=True,  pre='', suff='', msg_v='')
-    # decryption can also be done on file encrypted using encrypt_file()
+from chunkcrypt.cryptchunk import decrypt_file, downl_decrypt
+# decrypt_file(key, encrypted_file, output_file)
+# downl_decrypt(url, output_file, key, silent=True,  pre='', suff='', msg_v='')
+# decryption can also be done on file encrypted using encrypt_file()
 
-    # decrypting a file
-    decrypt_file('CemuWNzkXti7OVAmFV0SIpZAxkF2wybK', '/home/user/encrytfile.txt', '/home/user/decryptfile.txt')
+# decrypting a file
+decrypt_file('CemuWNzkXti7OVAmFV0SIpZAxkF2wybK', '/home/user/encrytfile.txt', '/home/user/decryptfile.txt')
 
-    # decrypting from url, only works on direct download link or hotlink
-    downl_decrypt('https://sampledownl.com/download/encryptedfile.txt', '/home/user/decryptfile.txt', 'CemuWNzkXti7OVAmFV0SIpZAxkF2wybK')
+# decrypting from url, only works on direct download link or hotlink
+downl_decrypt('https://sampledownl.com/download/encryptedfile.txt', '/home/user/decryptfile.txt', 'CemuWNzkXti7OVAmFV0SIpZAxkF2wybK')
 
-    # decrypting from url, with message
-    downl_decrypt(
-        'https://sampledownl.com/download/encryptedfile.txt', 
-        '/home/user/decryptfile.txt', 
-        'CemuWNzkXti7OVAmFV0SIpZAxkF2wybK',
-        False,
-        ' * ',
-        ' - Test',
-        'MyFile'
-    )
-    # Output:
-    #  * Attempting to Download MyFile - Test
-    #  * Finished Downloading MyFile - Test
-    #  * Attempting to Decrypt Downloaded MyFile. Please wait, this might take a while depending on the size of file - Test
-    #  * Finished decrypting MyFile - Test
+# decrypting from url, with message
+downl_decrypt(
+    'https://sampledownl.com/download/encryptedfile.txt', 
+    '/home/user/decryptfile.txt', 
+    'CemuWNzkXti7OVAmFV0SIpZAxkF2wybK',
+    False,
+    ' * ',
+    ' - Test',
+    'MyFile'
+)
+# Output:
+#  * Attempting to Download MyFile - Test
+#  * Finished Downloading MyFile - Test
+#  * Attempting to Decrypt Downloaded MyFile. Please wait, this might take a while depending on the size of file - Test
+#  * Finished decrypting MyFile - Test
 ```

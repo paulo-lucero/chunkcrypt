@@ -1,4 +1,4 @@
-virchunk/
+/.venv
 __pycache__/
 tests/
 dist/

@@ -2,7 +2,6 @@ from cryptography.fernet import Fernet
 from tempfile import TemporaryFile
 from io import BytesIO
 import requests
-from math import floor
 
 class InMemFile(BytesIO):
     def read(self, arg):

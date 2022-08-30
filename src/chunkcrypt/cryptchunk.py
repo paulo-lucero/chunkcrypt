@@ -7,21 +7,27 @@ class InMemFile(BytesIO):
     def read(self, arg):
         return self.read1(arg)
 
-    def __getattr__(self, name):
-        return getattr(self, name)()
+def encrypt_data(fer_obj, in_file, out_file, def_ch=1024):
+    while rd_chk := in_file.read(def_ch):
+        enc_chk = fer_obj.encrypt(rd_chk)
+        ar_enc = len(enc_chk).to_bytes(4, 'big')
+        out_file.write(ar_enc)
+        out_file.write(enc_chk)
 
 def encrypt_file(fer_key, in_path, out_path, def_ch=1024):
     fer_key = fer_key if isinstance(fer_key, str) else str(Fernet.generate_key(), 'utf-8')
     fer_obj = Fernet(fer_key)
     if def_ch > 3221225472:
         raise ValueError(f'This {def_ch} chunk size might be too large, please use below 3gb')
+    if out_path is None:
+        byte_file = InMemFile()
+        with open(in_path, 'rb') as in_file:
+            encrypt_data(fer_obj, in_file, byte_file, def_ch)
+            byte_file.seek(0)
+        return {'key': fer_key, 'io': byte_file}
     with open(in_path, 'rb') as in_file, open(out_path, 'ab') as out_file:
-        while rd_chk := in_file.read(def_ch):
-            enc_chk = fer_obj.encrypt(rd_chk)
-            ar_enc = len(enc_chk).to_bytes(4, 'big')
-            out_file.write(ar_enc)
-            out_file.write(enc_chk)
-    return fer_key
+        encrypt_data(fer_obj, in_file, out_file, def_ch)
+    return {'key': fer_key, 'io': None}
 
 def chk_decrypt(fer_obj, in_file, out_file, silent=True, pre='', suff='', msg_v=''):
     if not silent:
@@ -35,7 +41,7 @@ def chk_decrypt(fer_obj, in_file, out_file, silent=True, pre='', suff='', msg_v=
 
 def decrypt_file(fer_key, in_path, out_path):
     fer_obj = Fernet(fer_key)
-    with open(in_path, 'rb') as in_file, open(out_path, 'ab') as out_file:
+    with (open(in_path, 'rb') if isinstance(in_path, str) else in_path) as in_file, open(out_path, 'ab') as out_file:
         chk_decrypt(fer_obj, in_file, out_file)
 
 def downl_decrypt(dl_url, out_path, fer_key, silent=True, pre='', suff='', msg_v=''):

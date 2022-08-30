@@ -8,6 +8,7 @@ cryptography = "*"
 requests = "*"
 
 [dev-packages]
+internetarchive = "*"
 
 [requires]
 python_version = "3.10"

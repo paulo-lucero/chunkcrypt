@@ -33,10 +33,26 @@ while True:
         if not os.path.exists(db_path):
             print('Database doesn\'t exist')
             continue
-        out_path = input('Please input the output path and file name: ')
-        if os.path.exists(out_path):
-            print(f'This output filename or directory \"{out_path}\" is exists')
-            continue
+        while True:
+            if encrt_mode == 'encrypt':
+                encrypt_type = input('\'File\' or \'Upload\'?: ')
+                if encrypt_type.lower() != 'file' and encrypt_type.lower() != 'upload':
+                    print('Invalid input')
+                    continue
+                break
+            else:
+                break
+        if encrypt_type.lower() == 'file':
+            out_path = input('Please input the output path and file name: ')
+            if not out_path.strip():
+                out_path = None
+                print('No output filename is entered, creating in-memory file')
+            elif os.path.exists(out_path):
+                print(f'This output filename or directory \"{out_path}\" is exists')
+                continue
+        else:
+            print('Feature not available yet')
+            out_path = None
         break
     if encrt_mode == 'decrypt':
         out_path = out_path if out_path.find('.db') > -1 else out_path + '.db'
@@ -44,7 +60,11 @@ while True:
 
 if encrt_mode == 'encrypt':
     used_key = encrypt_file(encrt_key, db_path, out_path, def_ch_sz)
-    print(f'Encryption key used: {used_key}')
+    print(f"Encryption key used: {used_key['key']}")
+    if used_key['io']:
+        decrypt_file(used_key['key'], used_key['io'], os.path.join(os.path.dirname(db_path), 'testdecr.db'))
+        print('It was decrypted, due to being as in-memory file')
+
 else:
     decrypt_file(encrt_key, db_path, out_path)
 
